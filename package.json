@@ -1,0 +1,24 @@
+{
+  "name": "dig-it",
+  "version": "1.0.0",
+  "description": "The musician's tool for transcribing music on YouTube",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliasricano/dig-it.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eliasricano/dig-it/issues"
+  },
+  "homepage": "https://github.com/eliasricano/dig-it#readme",
+  "devDependencies": {
+    "vite": "^8.0.0",
+    "vite-plugin-static-copy": "^3.3.0"
+  }
+}
