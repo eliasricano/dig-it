@@ -4,28 +4,35 @@ async function loadSVG(url) {
   return text;
 }
 
-async function addElement() {
-  const chromeControls = document.querySelector(".ytp-chrome-controls");
-  const rightControls = document.querySelector(".ytp-right-controls");
-
-  // Create div container for A/B controls
+async function injectLoopControls(chromeControls, rightControls) {
   const abContainer = document.createElement("div");
   abContainer.classList.add("loop-controls");
 
-  // Create A/B buttons
   const buttonA = document.createElement("button");
-  const svgAUrl = chrome.runtime.getURL("images/looks_one.svg");
-  buttonA.innerHTML = await loadSVG(svgAUrl);
-
   const buttonB = document.createElement("button");
-  const svgBUrl = chrome.runtime.getURL("images/looks_two.svg");
-  buttonB.innerHTML = await loadSVG(svgBUrl);
-
-  // Append to container
   abContainer.appendChild(buttonA);
   abContainer.appendChild(buttonB);
 
   chromeControls.insertBefore(abContainer, rightControls);
+
+  buttonA.innerHTML = await loadSVG(chrome.runtime.getURL("images/looks_one.svg"));
+  buttonB.innerHTML = await loadSVG(chrome.runtime.getURL("images/looks_two.svg"));
 }
 
-addElement();
+function tryInject(framesLeft = 30) {
+  const chromeControls = document.querySelector(".ytp-chrome-controls");
+  const rightControls = document.querySelector(".ytp-right-controls");
+
+  if (chromeControls && rightControls) {
+    if (chromeControls.querySelector(".loop-controls")) return;
+    injectLoopControls(chromeControls, rightControls);
+    return;
+  }
+
+  if (framesLeft > 0) {
+    requestAnimationFrame(() => tryInject(framesLeft - 1));
+  }
+}
+
+tryInject();
+window.addEventListener("yt-navigate-finish", () => tryInject());
